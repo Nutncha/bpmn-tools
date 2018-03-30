@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+    <script src="https://unpkg.com/bpmn-js@0.28.3/dist/bpmn-viewer.development.js"></script>
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="canvas"></div>
+    <script>
+        var diagramUrl = 'https://cdn.rawgit.com/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
+        // viewer instance
+        var bpmnViewer = new BpmnJS({
+            container: '#canvas'
+        });
+
+        function openDiagram(bpmnXML) {
+            bpmnViewer.importXML(bpmnXML, function (err) {
+                if (err) {
+                    return console.error('could not import BPMN 2.0 diagram', err);
+                }
+
+                var canvas = bpmnViewer.get('canvas');
+                var overlays = bpmnViewer.get('overlays');
+
+                canvas.zoom('fit-viewport');
+
+                overlays.add('SCAN_OK', 'note', {
+                    position: {
+                        bottom: 0,
+                        right: 0
+                    },
+                    html: '<div class="diagram-note">Mixed up the labels?</div>'
+                });
+
+                canvas.addMarker('SCAN_OK', 'needs-discussion');
+            });
+        }
+
+        $.get(diagramUrl, openDiagram, 'text');
+    </script>
+</body>
+</html>
